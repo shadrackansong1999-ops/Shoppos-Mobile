@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/utils/search.dart';
+
 /// Describes one text field in a generic entity form.
 class FieldSpec {
   final String key;
@@ -65,8 +67,14 @@ class _GenericCrudScreenState extends State<GenericCrudScreen> {
 
   List<Map<String, dynamic>> get _filtered {
     if (_query.trim().isEmpty) return _rows;
-    final q = _query.toLowerCase();
-    return _rows.where((r) => widget.titleBuilder(r).toLowerCase().contains(q)).toList();
+    return rankBySearch(
+      _rows,
+      _query,
+      fields: (r) => [
+        widget.titleBuilder(r),
+        if (widget.subtitleBuilder != null) widget.subtitleBuilder!(r) ?? '',
+      ],
+    );
   }
 
   Future<void> _openForm({Map<String, dynamic>? existing}) async {

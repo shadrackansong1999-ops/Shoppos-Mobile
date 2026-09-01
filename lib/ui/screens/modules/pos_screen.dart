@@ -94,7 +94,7 @@ class _PosScreenState extends State<PosScreen> {
                             child: Text(p['name'] as String, maxLines: 2, overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(fontWeight: FontWeight.w600)),
                           ),
-                          Text(Money.format(p['selling_price'] as num), style: const TextStyle(color: AppTheme.blue, fontWeight: FontWeight.bold)),
+                          Text(Money.format(p['selling_price'] as num), style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold)),
                           Text(outOfStock ? 'Out of stock' : '$qty ${p['unit']} left',
                               style: TextStyle(fontSize: 11, color: outOfStock ? AppTheme.red : Colors.grey)),
                         ],
@@ -109,7 +109,7 @@ class _PosScreenState extends State<PosScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: cart.isEmpty ? null : _openCart,
-        backgroundColor: cart.isEmpty ? Colors.grey : AppTheme.blue,
+        backgroundColor: cart.isEmpty ? Colors.grey : Theme.of(context).colorScheme.primary,
         icon: const Icon(Icons.shopping_cart),
         label: Text(cart.isEmpty ? 'Cart empty' : '${cart.items.length} items - ${Money.format(cart.total)}'),
       ),

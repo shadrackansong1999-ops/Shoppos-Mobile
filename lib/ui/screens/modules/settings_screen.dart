@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/app_state.dart';
+import '../../../core/providers/theme_provider.dart';
 import '../../../core/repositories/misc_repositories.dart';
 import '../../../core/theme.dart';
 import '../../../core/utils/formatters.dart';
@@ -86,6 +87,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 20),
                 ElevatedButton(onPressed: _saving ? null : _save, child: _saving ? const CircularProgressIndicator(color: Colors.white) : const Text('Save Settings')),
                 const Divider(height: 40),
+                const Text('Theme', style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                const Text('Pick a color theme for this device', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                const SizedBox(height: 12),
+                const _ThemePicker(),
+                const Divider(height: 40),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.person),
@@ -99,6 +106,65 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
+    );
+  }
+}
+
+/// Grid of theme swatches - tap one to apply it instantly across the
+/// whole app, same interaction as the desktop Settings page.
+class _ThemePicker extends StatelessWidget {
+  const _ThemePicker();
+
+  @override
+  Widget build(BuildContext context) {
+    final current = context.watch<ThemeProvider>().key;
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.8,
+      ),
+      itemCount: AppThemes.all.length,
+      itemBuilder: (ctx, i) {
+        final spec = AppThemes.all[i];
+        final selected = spec.key == current;
+        return InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => context.read<ThemeProvider>().setTheme(spec.key),
+          child: Column(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [spec.sidebarBg, spec.accent],
+                  ),
+                  border: Border.all(
+                    color: selected ? spec.accent : Colors.transparent,
+                    width: selected ? 3 : 0,
+                  ),
+                  boxShadow: selected
+                      ? [BoxShadow(color: spec.accent.withValues(alpha: 0.4), blurRadius: 8, spreadRadius: 1)]
+                      : null,
+                ),
+                child: selected ? const Icon(Icons.check, color: Colors.white, size: 18) : null,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                spec.label,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 10),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

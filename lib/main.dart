@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'core/providers/app_state.dart';
 import 'core/providers/cart_provider.dart';
-import 'core/theme.dart';
+import 'core/providers/theme_provider.dart';
 import 'ui/screens/boot/boot_gate.dart';
 
 void main() {
@@ -20,12 +20,15 @@ class ShopPosApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AppState()..bootstrap()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()..load()),
       ],
-      child: MaterialApp(
-        title: 'ShopPOS Mobile',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.light(),
-        home: const BootGate(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) => MaterialApp(
+          title: 'ShopPOS Mobile',
+          debugShowCheckedModeBanner: false,
+          theme: themeProvider.themeData,
+          home: const BootGate(),
+        ),
       ),
     );
   }

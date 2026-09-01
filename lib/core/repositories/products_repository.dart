@@ -1,21 +1,30 @@
 import '../db/base_repository.dart';
+import '../utils/search.dart';
 
 class ProductsRepository {
   final _repo = BaseRepository('products');
 
+  /// Ranked search - not just "contains": exact/prefix matches on name,
+  /// SKU, or barcode come first (so scanning or typing an exact SKU jumps
+  /// straight to it), then multi-word matches ("choc milk" finds
+  /// "Chocolate Milk"), then a typo-tolerant fallback so a small
+  /// misspelling still finds the right product instead of nothing.
   Future<List<Map<String, dynamic>>> getAll({String? searchQuery, bool activeOnly = true}) async {
     final rows = await _repo.getAll(
       where: activeOnly ? 'is_active = 1' : null,
       orderBy: 'name COLLATE NOCASE ASC',
     );
     if (searchQuery == null || searchQuery.trim().isEmpty) return rows;
-    final q = searchQuery.trim().toLowerCase();
-    return rows.where((r) {
-      final name = (r['name'] as String? ?? '').toLowerCase();
-      final sku = (r['sku'] as String? ?? '').toLowerCase();
-      final barcode = (r['barcode'] as String? ?? '').toLowerCase();
-      return name.contains(q) || sku.contains(q) || barcode.contains(q);
-    }).toList();
+
+    return rankBySearch(
+      rows,
+      searchQuery,
+      fields: (r) => [
+        r['name'] as String? ?? '',
+        r['sku'] as String? ?? '',
+        r['barcode'] as String? ?? '',
+      ],
+    );
   }
 
   Future<Map<String, dynamic>?> getById(String id) => _repo.getById(id);

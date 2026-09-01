@@ -58,8 +58,9 @@ class _LicenseSetupScreenState extends State<LicenseSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: AppTheme.navy,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -73,7 +74,7 @@ class _LicenseSetupScreenState extends State<LicenseSetupScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Icon(Icons.storefront, size: 40, color: AppTheme.blue),
+                      Icon(Icons.storefront, size: 40, color: scheme.primary),
                       const SizedBox(height: 12),
                       const Text('Set Up ShopPOS', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                       const Text('Choose how this device should run', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),

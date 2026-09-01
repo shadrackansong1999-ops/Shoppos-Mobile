@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     crossAxisSpacing: 10,
                     childAspectRatio: 1.5,
                     children: [
-                      KpiCard(label: "Today's Sales", value: Money.format(_todayTotal), icon: Icons.point_of_sale, accent: AppTheme.blue),
+                      KpiCard(label: "Today's Sales", value: Money.format(_todayTotal), icon: Icons.point_of_sale, accent: Theme.of(context).colorScheme.primary),
                       KpiCard(label: 'Transactions', value: '$_todayCount', icon: Icons.receipt_long, accent: AppTheme.green),
                       KpiCard(label: 'Low Stock', value: '$_lowStockCount', icon: Icons.inventory_2, accent: AppTheme.amber),
                       KpiCard(

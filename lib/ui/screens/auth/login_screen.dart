@@ -41,8 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: AppTheme.navy,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Icon(Icons.storefront, size: 40, color: AppTheme.blue),
+                      Icon(Icons.storefront, size: 40, color: scheme.primary),
                       const SizedBox(height: 12),
                       const Text('ShopPOS', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                       const Text('Sign in to continue', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),

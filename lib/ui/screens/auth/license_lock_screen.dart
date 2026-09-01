@@ -44,7 +44,7 @@ class _LicenseLockScreenState extends State<LicenseLockScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.navy,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(

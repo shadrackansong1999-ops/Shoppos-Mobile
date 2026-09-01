@@ -117,7 +117,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 childAspectRatio: 1.5,
                 children: [
                   KpiCard(label: 'Revenue', value: Money.format(_revenue), icon: Icons.trending_up, accent: AppTheme.green),
-                  KpiCard(label: 'Transactions', value: '$_txCount', icon: Icons.receipt, accent: AppTheme.blue),
+                  KpiCard(label: 'Transactions', value: '$_txCount', icon: Icons.receipt, accent: Theme.of(context).colorScheme.primary),
                   KpiCard(label: 'Expenses', value: Money.format(_expenseTotal), icon: Icons.money_off, accent: AppTheme.red),
                   KpiCard(label: 'Net (Rev - Exp)', value: Money.format(_revenue - _expenseTotal), icon: Icons.account_balance_wallet, accent: AppTheme.amber),
                 ],
