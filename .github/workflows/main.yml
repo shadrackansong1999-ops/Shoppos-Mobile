@@ -1,0 +1,41 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Generate the Android platform files
+        run: |
+          flutter create --platforms=android --org com.spidersoftware --project-name shoppos_mobile .scaffold_tmp
+          cp -r .scaffold_tmp/android .
+          rm -rf .scaffold_tmp
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze (report only - does not fail the build)
+        run: flutter analyze --no-fatal-infos || true
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Upload the APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: shoppos-mobile-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
